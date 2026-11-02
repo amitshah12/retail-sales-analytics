@@ -1,136 +1,267 @@
 # Retail Sales & Customer Analytics
 
-An end-to-end retail data analytics project using **Python, PostgreSQL, SQL, Pandas, and Streamlit** to explore historical sales performance, analyze customer purchasing behavior, and generate actionable business insights.
+An end-to-end data analytics project that explores retail transaction data to uncover sales trends, understand customer purchasing behaviour, perform RFM-based customer segmentation, and present business insights through an interactive Streamlit dashboard.
+
+**Tech Stack:** Python · Pandas · NumPy · PostgreSQL · SQL · SQLAlchemy · Matplotlib · Seaborn · Streamlit
+
+**Dashboard:** [Retail Sales Analytics Dashboard](https://retail-salesanalytics.streamlit.app/)
+
+---
 
 ## Project Overview
 
-This project analyzes the UCI Online Retail dataset, which contains 541,909 transaction records covering December 2010 to December 2011.
+This project uses the **Online Retail dataset** from the UCI Machine Learning Repository to analyse retail transactions from December 2010 to December 2011.
 
-The project combines data preparation, relational database analysis, customer segmentation, and interactive business intelligence visualizations.
+The dataset contains 541,909 transaction records from a UK-based online retailer.
 
-**Key objectives:**
-- Analyze retail revenue and sales performance.
-- Identify revenue contributions across countries and customers.
-- Understand customer acquisition and repeat purchasing behavior.
-- Segment customers using Recency, Frequency, and Monetary (RFM) analysis.
-- Present findings through an interactive dashboard.
+The project follows an end-to-end analytics workflow, starting with data exploration and cleaning, followed by PostgreSQL integration, SQL-based business analysis, customer segmentation, data visualization, and dashboard development.
+
+### Project Objectives
+
+- Analyse overall retail sales performance and revenue trends.
+- Identify top-performing products and countries.
+- Understand customer purchasing patterns and repeat purchases.
+- Perform RFM (Recency, Frequency, Monetary) customer segmentation.
+- Identify valuable, loyal, at-risk, and lost customer groups.
+- Build an interactive dashboard to communicate business insights.
+
+---
+
+## Key Features
+
+### 1. Exploratory Data Analysis and Data Cleaning
+
+- Explored the original 541,909 transaction records.
+- Identified duplicate records and missing values.
+- Converted transaction dates into appropriate datetime formats.
+- Preserved CustomerID as an identifier.
+- Identified cancelled invoices, potential returns, zero-priced items, and negative price adjustments.
+- Calculated transaction revenue using Quantity × UnitPrice.
+
+After removing exact duplicate records, the cleaned dataset contains **536,641 records**.
+
+### 2. SQL-Based Business Analysis
+
+Performed business analysis using PostgreSQL, including:
+
+- Overall business KPIs.
+- Monthly revenue and order trends.
+- Top 10 products by revenue.
+- Top 10 countries by revenue.
+- Top 10 customers by revenue.
+- Cancellation and return analysis.
+- Monthly revenue ranking using window functions.
+- Customer purchase frequency analysis.
+
+**SQL concepts demonstrated:**
+- Aggregate functions
+- GROUP BY and ORDER BY
+- Common Table Expressions (CTEs)
+- Window functions
+- RANK()
+- CASE statements
+- Date-based analysis
+
+### 3. RFM Customer Segmentation
+
+Implemented RFM analysis to understand customer purchasing behaviour.
+
+The analysis evaluates:
+
+- **Recency:** How recently a customer made a purchase.
+- **Frequency:** How frequently a customer made purchases.
+- **Monetary:** How much a customer spent.
+
+Customers receive scores from 1 to 5 for each RFM dimension using quantile-based scoring.
+
+The resulting RFM scores are used to classify customers into six segments:
+
+| Customer Segment | Customers |
+|---|---:|
+| Champions | 942 |
+| Loyal Customers | 508 |
+| Potential Loyalists | 843 |
+| Recent Customers | 310 |
+| At Risk | 661 |
+| Lost Customers | 1,074 |
+| **Total** | **4,338** |
+
+The segment-level analysis also calculates average recency, average frequency, average monetary value, and total segment revenue.
+
+### 4. Interactive Streamlit Dashboard
+
+The dashboard provides an interactive interface for exploring retail sales and customer analytics.
+
+Features include:
+
+- Business overview and KPI cards.
+- Monthly revenue trends.
+- Top 10 countries by revenue.
+- Date-range filtering.
+- Country-based multiselect filtering.
+- Customer segment insights.
+- Business insights and suggested actions.
+- Customer exploration.
+
+**Note:** The RFM customer insights panel uses the complete RFM dataset and is independent of the dashboard's date and country filters.
+
+### Dashboard Screenshots
+
+#### Dashboard Overview
+![Dashboard Overview](screenshots/dashboard-overview.png)
+
+#### Sales Analysis
+![Sales Analysis](screenshots/sales-analysis.png)
+
+#### Customer Segmentation
+![Customer Segmentation](screenshots/customer-segmentation.png)
+
+#### Business Insights
+![Business Insights](screenshots/business-insights.png)
+
+#### Customer Exploration
+![Customer Exploration](screenshots/customer-exploration.png)
+
+---
+
+## Visualizations
+
+The project generates the following visualizations using Python:
+
+| Visualization | Description |
+|---|---|
+| Monthly Revenue | Monthly sales revenue trends |
+| Revenue by Country | Revenue contribution across countries |
+| Customer Segments | Distribution of RFM customer segments |
+| Customer Acquisition and Retention | New and returning customer trends |
+| Customer Revenue Pareto | Customer revenue contribution analysis |
+
+Generated charts are stored in the `reports/` directory.
+
+---
 
 ## Technology Stack
 
 | Category | Technologies |
 |---|---|
-| Programming | Python |
-| Data Processing | Pandas, NumPy |
+| Programming Language | Python |
+| Data Manipulation | Pandas, NumPy |
 | Database | PostgreSQL |
-| SQL Analysis | PostgreSQL SQL, CTEs, window functions |
-| Database Connectivity | SQLAlchemy, psycopg2 |
-| Visualization | Matplotlib |
+| Query Language | SQL |
+| Database Integration | SQLAlchemy, psycopg2 |
+| Data Visualization | Matplotlib, Seaborn |
 | Dashboard | Streamlit |
-| Development | VS Code, Git, GitHub |
+| Environment Management | python-dotenv |
+| Development Tools | Jupyter Notebook, VS Code |
+| Version Control | Git, GitHub |
 
-## Features
-
-### Sales Performance Analysis
-- Total sales revenue
-- Total orders and unique customers
-- Quantity sold and average order value
-- Monthly revenue trends
-- Revenue contribution by country
-- Month-over-month revenue growth
-- Cumulative revenue analysis
-
-### Customer Analytics
-- Customer revenue ranking
-- New versus returning customer analysis
-- Customer revenue contribution and Pareto analysis
-- RFM customer segmentation
-- Customer segment distribution and business insights
-
-### Interactive Dashboard
-- Date-range filtering
-- Country-based filtering
-- Business KPI cards
-- Monthly revenue visualization
-- Top countries by revenue
-- Customer segmentation and RFM insights
-- Suggested business actions
-
-**Note:** The RFM analysis uses the complete dataset and is independent of the dashboard's date and country filters.
-
-## Dataset
-
-**Source:** [UCI Machine Learning Repository — Online Retail](https://archive.ics.uci.edu/dataset/352/online+retail)
-
-The dataset contains transaction-level information including invoice numbers, product codes, descriptions, quantities, invoice dates, unit prices, customer identifiers, and countries.
-
-The original dataset is provided by the UCI Machine Learning Repository under the Creative Commons Attribution 4.0 International (CC BY 4.0) license.
-
-The dataset is not included directly in this repository. It can be retrieved from the original source using the project's download script.
+---
 
 ## Project Structure
 
 ```text
 retail-sales-analytics/
+│
 ├── dashboard/
 │   └── app.py
+│
 ├── data/
 │   ├── raw/
 │   └── processed/
+│
 ├── notebooks/
+│   ├── 01_exploratory_data_analysis.ipynb
+│   └── 02_sales_analysis.ipynb
+│
 ├── reports/
-│   ├── visualization.py
-│   ├── monthly_revenue.png
-│   ├── customer_segments.png
-│   ├── revenue_by_country.png
 │   ├── customer_acquisition_retention.png
-│   └── customer_revenue_pareto.png
+│   ├── customer_revenue_pareto.png
+│   ├── customer_segments.png
+│   ├── monthly_revenue.png
+│   ├── revenue_by_country.png
+│   └── visualization.py
+│
+├── screenshots/
+│   ├── business-insights.png
+│   ├── customer-exploration.png
+│   ├── customer-segmentation.png
+│   ├── dashboard-overview.png
+│   └── sales-analysis.png
+│
 ├── scripts/
-│   └── download_data.py
+│   ├── clean_data.py
+│   ├── db_connection.py
+│   ├── download_data.py
+│   ├── load_data.py
+│   └── load_rfm_data.py
+│
 ├── sql/
+│   ├── 01_sales_analysis.sql
+│   ├── 09_create_rfm_tables.sql
+│   ├── 10_rfm_customer_analysis.sql
+│   └── 11_advanced_business_analysis.sql
+│
 ├── .env.example
 ├── .gitignore
-├── requirements.txt
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
-Additional scripts, notebooks, and SQL files are organized in their respective directories.
+**Note:** Raw and processed CSV files are generated locally and are not included in the repository.
+
+---
 
 ## Getting Started
 
-### 1. Clone the repository
+Follow these steps to run the project locally.
+
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/amitshah12/retail-sales-analytics.git
+
 cd retail-sales-analytics
 ```
 
-### 2. Create a virtual environment
+### 2. Create and Activate a Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
-Activate it on Windows:
+On Windows CMD:
 
-```bash
+```cmd
 venv\Scripts\activate
 ```
 
-### 3. Install dependencies
+### 3. Install Dependencies
+
+Install the project dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure PostgreSQL
+For notebook analysis and Python visualizations, also install:
 
-Install PostgreSQL and create a database named:
-
-```text
-retail_analytics
+```bash
+pip install jupyter numpy matplotlib seaborn
 ```
 
-Copy `.env.example` to `.env` and configure your local PostgreSQL credentials.
+### 4. Configure PostgreSQL
+
+Make sure PostgreSQL is installed and running.
+
+Create a database named:
+
+```sql
+CREATE DATABASE retail_analytics;
+```
+
+Create a `.env` file in the project root using `.env.example` as a reference.
+
+Configure your database credentials:
 
 ```env
 DB_USER=your_postgres_username
@@ -138,83 +269,191 @@ DB_PASSWORD=your_postgres_password
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=retail_analytics
+DB_SSLMODE=prefer
 ```
 
-Never commit your `.env` file or database credentials to GitHub.
+Use your own PostgreSQL credentials. Do not commit the `.env` file to GitHub.
 
-### 5. Download the dataset
+### 5. Download the Dataset
+
+Run:
 
 ```bash
 python scripts/download_data.py
 ```
 
-### 6. Prepare and load the database
+This downloads the Online Retail dataset and saves the raw CSV under:
 
-Run the project's data cleaning, transformation, and PostgreSQL loading scripts, followed by the SQL analysis and RFM segmentation scripts in their documented execution order.
+```text
+data/raw/online_retail.csv
+```
 
-### 7. Generate visualizations
+### 6. Clean and Transform the Dataset
+
+Run:
+
+```bash
+python scripts/clean_data.py
+```
+
+The script removes exact duplicate records, converts data types, creates transaction classification flags, calculates revenue, and exports:
+
+```text
+data/processed/online_retail_cleaned.csv
+```
+
+### 7. Load Transactions into PostgreSQL
+
+Run:
+
+```bash
+python scripts/load_data.py
+```
+
+This imports the cleaned transaction data into:
+
+```text
+public.retail_transactions
+```
+
+**Important:** The loader uses table replacement. Running it again replaces the existing transaction table.
+
+### 8. Perform SQL Business Analysis
+
+Open the SQL scripts in pgAdmin or another PostgreSQL client and execute them against the `retail_analytics` database.
+
+Start with:
+
+```text
+sql/01_sales_analysis.sql
+```
+
+This contains eight sales and customer analysis queries.
+
+### 9. Generate RFM Customer Data
+
+Launch Jupyter Notebook:
+
+```bash
+jupyter notebook
+```
+
+Open:
+
+```text
+notebooks/02_sales_analysis.ipynb
+```
+
+Run the notebook cells to perform RFM analysis, assign customer segments, calculate segment-level summaries, and export:
+
+```text
+data/processed/customer_rfm.csv
+data/processed/rfm_segment_summary.csv
+```
+
+### 10. Create and Load RFM Tables
+
+Execute:
+
+```text
+sql/09_create_rfm_tables.sql
+```
+
+This creates the PostgreSQL tables required for RFM analysis.
+
+Then run:
+
+```bash
+python scripts/load_rfm_data.py
+```
+
+The script loads both RFM datasets into PostgreSQL and verifies the imported record counts.
+
+### 11. Execute Advanced SQL Analysis
+
+Execute the following SQL scripts:
+
+```text
+sql/10_rfm_customer_analysis.sql
+sql/11_advanced_business_analysis.sql
+```
+
+These contain customer segment analysis and advanced business queries using CTEs and window functions.
+
+### 12. Generate Visualizations
+
+Run:
 
 ```bash
 python reports/visualization.py
 ```
 
-The generated charts are saved in the `reports/` directory.
+Generated visualization files are saved under `reports/`.
 
-### 8. Launch the Streamlit dashboard
+### 13. Launch the Streamlit Dashboard
+
+Run:
 
 ```bash
 streamlit run dashboard/app.py
 ```
 
-Open the local URL displayed by Streamlit, normally:
+The dashboard should open locally at:
 
 ```text
 http://localhost:8501
 ```
 
-## Visualizations
+---
 
-### Monthly Revenue Trend
+## Dataset Information and Attribution
 
-![Monthly Revenue](reports/monthly_revenue.png)
+**Dataset:** Online Retail
 
-### Customer Segment Distribution
+**Source:** UCI Machine Learning Repository
 
-![Customer Segments](reports/customer_segments.png)
+**Dataset ID:** 352
 
-### Revenue by Country
+**Time Period:** December 2010 – December 2011
 
-![Revenue by Country](reports/revenue_by_country.png)
+**Original Records:** 541,909
 
-### New vs Returning Customers
+**License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
 
-![Customer Acquisition and Retention](reports/customer_acquisition_retention.png)
+Dataset link:
 
-### Customer Revenue Pareto Analysis
+https://archive.ics.uci.edu/dataset/352/online+retail
 
-![Customer Revenue Pareto](reports/customer_revenue_pareto.png)
+The dataset is not included in this repository. It can be downloaded using the provided `scripts/download_data.py` script.
 
-## Business Insights
+Attribution: Chen, D. (2015). *Online Retail* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33
 
-The project supports business analysis in several areas:
-
-- **Revenue performance:** Identify seasonal patterns and changes in monthly sales.
-- **Geographic performance:** Compare revenue contributions across countries.
-- **Customer value:** Identify high-value customer groups and their revenue contributions.
-- **Retention opportunities:** Examine customers classified as At Risk or Lost using RFM segmentation.
-- **Customer engagement:** Develop targeted recommendations based on customer purchasing behavior.
-
-These insights are derived from historical transactions and are intended for analytical demonstration rather than claims about current retail performance.
+---
 
 ## Project Status
 
-Core data processing, PostgreSQL analysis, visualization generation, and the interactive Streamlit dashboard are implemented.
+The project includes:
 
-Analytical validation, deployment, and final portfolio integration are planned as subsequent improvements.
+- Exploratory data analysis and data cleaning.
+- PostgreSQL database integration.
+- SQL-based sales and customer analysis.
+- RFM customer segmentation.
+- Python-based data visualizations.
+- Interactive Streamlit dashboard.
+- GitHub project documentation.
+
+---
 
 ## Author
 
 **Amit Shah**
 
-- [GitHub](https://github.com/amitshah12)
-- [LinkedIn](https://www.linkedin.com/in/amitshah-net60/)
+B.Tech – Computer Science and Engineering
+
+- GitHub: https://github.com/amitshah12
+- LinkedIn: https://www.linkedin.com/in/amitshah-net60/
+- Email: amitshah.net60@gmail.com
+
+---
+
+*Built as a hands-on data analytics project to apply Python, SQL, PostgreSQL, customer analytics, and dashboard development to a real-world retail dataset.*
