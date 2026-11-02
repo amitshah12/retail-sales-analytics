@@ -23,58 +23,103 @@ st.caption(
 st.divider()
 
 
+
+
 # --------------------------------------------------
 # DATABASE CONFIGURATION
 # --------------------------------------------------
-
-# Keep these credentials consistent with your existing setup.
-# Do not commit database passwords to a public GitHub repository.
-
 
 import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+from sqlalchemy.engine import URL
 
-# Load environment variables from the project root.
+# Load local .env when running on your computer.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(PROJECT_ROOT / ".env")
 
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = os.getenv("DB_NAME", "retail_analytics")
 
-required_variables = {
-    "DB_USER": DB_USER,
-    "DB_PASSWORD": DB_PASSWORD,
-    "DB_NAME": DB_NAME,
-}
+def get_database_config():
+    """
+    Read database credentials from Streamlit secrets
+    when deployed, or from environment variables locally.
+    """
 
-missing_variables = [
-    name for name, value in required_variables.items()
-    if not value
-]
+    try:
+        secrets = st.secrets
+        has_cloud_secrets = "DB_USER" in secrets
 
-if missing_variables:
-    raise ValueError(
-        "Missing database environment variables: "
-        + ", ".join(missing_variables)
-    )
+    except Exception:
+        secrets = None
+        has_cloud_secrets = False
 
-DATABASE_URL = (
-    f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}"
-    f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-)
+    if has_cloud_secrets:
+        config = {
+            "user": secrets["DB_USER"],
+            "password": secrets["DB_PASSWORD"],
+            "host": secrets["DB_HOST"],
+            "port": secrets.get("DB_PORT", "5432"),
+            "database": secrets["DB_NAME"],
+            "sslmode": secrets.get("DB_SSLMODE", "require"),
+        }
+
+    else:
+        config = {
+            "user": os.getenv("DB_USER"),
+            "password": os.getenv("DB_PASSWORD"),
+            "host": os.getenv("DB_HOST", "localhost"),
+            "port": os.getenv("DB_PORT", "5432"),
+            "database": os.getenv("DB_NAME", "retail_analytics"),
+            "sslmode": os.getenv("DB_SSLMODE", ""),
+        }
+
+    missing = [
+        key for key in ("user", "password", "host", "database")
+        if not config.get(key)
+    ]
+
+    if missing:
+        raise ValueError(
+            "Missing database configuration: "
+            + ", ".join(missing)
+        )
+
+    return config
+
 
 @st.cache_resource
 def get_engine():
-    return create_engine(DATABASE_URL)
+
+    config = get_database_config()
+
+    connection_options = {}
+
+    if config["sslmode"]:
+        connection_options["sslmode"] = config["sslmode"]
+
+    database_url = URL.create(
+        drivername="postgresql+psycopg2",
+        username=config["user"],
+        password=config["password"],
+        host=config["host"],
+        port=int(config["port"]),
+        database=config["database"],
+        query=connection_options,
+    )
+
+    return create_engine(
+        database_url,
+        pool_pre_ping=True
+    )
 
 
-@st.cache_data(ttl=300)
+# --------------------------------------------------
+# DATA FETCHING FUNCTION
+# --------------------------------------------------
+
 def fetch_data(query, params=None, expanding_params=None):
+
     engine = get_engine()
     statement = text(query)
 
@@ -90,6 +135,7 @@ def fetch_data(query, params=None, expanding_params=None):
             connection,
             params=params or {}
         )
+
 
 
 # --------------------------------------------------
